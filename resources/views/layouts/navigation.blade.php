@@ -26,6 +26,12 @@
                     <x-nav-link :href="route('tagihan.index')" :active="request()->routeIs('tagihan.*')">
                         {{ __('Manajemen Tagihan') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('pengeluaran.index')" :active="request()->routeIs('pengeluaran.*')">
+                        {{ __('Manajemen Pengeluaran') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.index')">
+                        {{ __('Laporan') }}
+                    </x-nav-link>
                 </div>
             </div>
 

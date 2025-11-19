@@ -13,8 +13,12 @@ class UnitController extends Controller
      */
     public function index()
     {
-        // Ambil semua data unit dari database
-        $units = Unit::latest()->get();
+        // Ambil semua unit, DAN sertakan data sewa yang statusnya 'aktif'
+        $units = Unit::with(['sewa' => function ($query) {
+                            $query->where('status', 'aktif')->with('penyewa');
+                        }])
+                        ->latest()
+                        ->get();
 
         // Kirim data ke view
         return view('units.index', compact('units'));

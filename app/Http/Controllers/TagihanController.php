@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tagihan;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TagihanExport;
 
 class TagihanController extends Controller
 {
@@ -51,5 +53,11 @@ class TagihanController extends Controller
 
         // Kirim Snap Token ke view
         return view('tagihan.bayar', compact('snapToken', 'tagihan'));
+    }
+
+    public function exportExcel() 
+    {
+        // Perintah ini akan memicu download file
+        return Excel::download(new TagihanExport, 'laporan_tagihan_kost_bu_adah.xlsx');
     }
 }

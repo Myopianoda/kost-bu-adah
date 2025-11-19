@@ -30,7 +30,7 @@
                         
                         <div class="mt-4">
                             <label for="alamat_asal" class="block font-medium text-sm text-gray-700">Alamat Asal</label>
-                            <textarea id="alamat_asal" name="alamat_asal" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>{{ old('alamat_asal', 'alamat_asal', $penyewa->alamat_asal) }}</textarea>
+                            <textarea id="alamat_asal" name="alamat_asal" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>{{ old('alamat_asal', $penyewa->alamat_asal) }}</textarea>
                         </div>
 
                         <div class="mt-4">
@@ -41,6 +41,11 @@
                                 </div>
                             @endif
                             <input id="foto_ktp" class="block mt-1 w-full" type="file" name="foto_ktp" />
+                        </div>
+
+                        <div class="mt-4">
+                            <label for="password" class="block font-medium text-sm text-gray-700">Password Baru (Kosongkan jika tidak ingin ganti)</label>
+                            <input id="password" class="block mt-1 w-full" type="password" name="password" />
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

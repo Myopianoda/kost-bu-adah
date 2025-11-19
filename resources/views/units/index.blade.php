@@ -64,9 +64,24 @@
                                                 Sewakan
                                             </a>
                                         @else
-                                            {{-- Nanti kita bisa tampilkan siapa penyewanya di sini --}}
-                                            <span class="text-gray-500">Terisi</span>
+                                            @php
+                                                // $unit->sewa adalah hasil dari query 'with' kita di UnitController
+                                                $sewaAktif = $unit->sewa->first(); 
+                                            @endphp
+
+                                            @if($sewaAktif)
+                                                <form class="inline-block" action="{{ route('sewa.stop', $sewaAktif->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghentikan sewa ini? Unit akan berstatus TERSEDIA.');">
+                                                    @csrf
+                                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700">
+                                                        Hentikan Sewa
+                                                    </button>
+                                                </form>
+                                                <span class="ml-2 text-sm text-gray-500">(oleh: {{ $sewaAktif->penyewa->nama_lengkap }})</span>
+                                            @else
+                                                <span class="text-gray-500">Terisi (Data Lama)</span>
+                                            @endif
                                         @endif
+                                        
                                         <a href="{{ route('units.edit', $unit->id) }}" class="text-indigo-600 hover:text-indigo-900 ml-4">Edit</a>
                                     </td>
                                 </tr>

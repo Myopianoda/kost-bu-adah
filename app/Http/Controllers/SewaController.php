@@ -7,6 +7,7 @@ use App\Models\Sewa;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class SewaController extends Controller
 {
@@ -42,5 +43,27 @@ class SewaController extends Controller
         });
 
         return redirect()->route('units.index')->with('success', 'Unit berhasil disewakan!');
+    }
+
+    public function stop(Sewa $sewa)
+    {
+        // Gunakan transaction untuk memastikan 2 update ini berhasil bersamaan
+        DB::transaction(function () use ($sewa) {
+            
+            // 1. Update status unit kembali menjadi "tersedia"
+            // Kita perlu mengambil relasi 'unit' terlebih dahulu
+            $unit = $sewa->unit;
+            $unit->status = 'tersedia';
+            $unit->save();
+
+            // 2. Update status sewa menjadi "selesai"
+            $sewa->status = 'selesai';
+            $sewa->tanggal_selesai = Carbon::now();
+            $sewa->save();
+        });
+
+        // Redirect kembali ke halaman unit dengan pesan sukses
+        return redirect()->route('units.index')
+                         ->with('success', 'Sewa telah berhasil dihentikan dan unit kembali tersedia.');
     }
 }

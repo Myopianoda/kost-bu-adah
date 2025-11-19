@@ -7,27 +7,40 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-gray-500 text-sm font-medium">UNIT TERISI</h3>
-                    <p class="text-3xl font-semibold mt-1">{{ $unitTerisi }}</p>
-                </div>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-gray-500 text-sm font-medium">UNIT KOSONG</h3>
-                    <p class="text-3xl font-semibold mt-1">{{ $unitKosong }}</p>
-                </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-gray-500 text-sm font-medium">PENDAPATAN BULAN INI</h3>
                     <p class="text-3xl font-semibold mt-1">Rp {{ number_format($pendapatanBulanIni) }}</p>
                 </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-gray-500 text-sm font-medium">PENGELUARAN BULAN INI</h3>
+                    <p class="text-3xl font-semibold mt-1 text-red-600">Rp {{ number_format($pengeluaranBulanIni) }}</p>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-gray-500 text-sm font-medium">LABA BERSIH BULAN INI</h3>
+                    <p class="text-3xl font-semibold mt-1 text-green-600">Rp {{ number_format($labaBersihBulanIni) }}</p>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-gray-500 text-sm font-medium">UNIT TERISI</h3>
+                    <p class="text-3xl font-semibold mt-1">{{ $unitTerisi }}</p>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-gray-500 text-sm font-medium">UNIT KOSONG</h3>
+                    <p class="text-3xl font-semibold mt-1">{{ $unitKosong }}</p>
+                </div>
+
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-gray-500 text-sm font-medium">TAGIHAN BELUM DIBAYAR</h3>
                     <p class="text-3xl font-semibold mt-1">Rp {{ number_format($tagihanBelumBayar) }}</p>
                 </div>
+
             </div>
-
-            {{-- ... setelah </div> dari grid statistik --}}
-
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-8">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-semibold mb-4">Grafik Pendapatan (6 Bulan Terakhir)</h3>
@@ -36,8 +49,6 @@
                     </div>
                 </div>
             </div>
-
-            {{-- ... kode untuk Tabel Tagihan Jatuh Tempo ... --}}
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-8">
                 <div class="p-6 text-gray-900">
@@ -77,7 +88,7 @@
     </div>
 
 
-{{-- GANTI SELURUH BLOK SCRIPT LAMA ANDA DENGAN YANG INI --}}
+{{-- Script untuk Chart.js (Sudah diperbaiki anti-loop) --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -105,8 +116,6 @@
                 }]
             },
             options: {
-                // Kita bisa aktifkan lagi animasinya karena masalah loop sudah diatasi
-                // animation: false, 
                 scales: {
                     y: {
                         beginAtZero: true
