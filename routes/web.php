@@ -55,7 +55,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Manajemen Tagihan
     Route::get('/tagihan', [TagihanController::class, 'index'])->name('tagihan.index');
     Route::get('/tagihan/export', [TagihanController::class, 'exportExcel'])->name('tagihan.export');
-    Route::post('/bayar/{tagihan}', [TagihanController::class, 'bayar'])->name('tagihan.bayar');
 
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
 });
@@ -94,5 +93,17 @@ Route::middleware(['auth:penyewa'])->prefix('portal')->name('penyewa.')->group(f
     
 });
 
-// Rute Otentikasi Laravel Bawaan (untuk Admin)
+// ----------------------------------------------------
+// RUTE BERSAMA (Bisa diakses Admin & Penyewa)
+// ----------------------------------------------------
+Route::middleware(['auth:web,penyewa'])->group(function () {
+
+    // Proses Pembayaran Midtrans
+    Route::post('/bayar/{tagihan}', [TagihanController::class, 'bayar'])->name('tagihan.bayar');
+
+    // Halaman Tampilan Pembayaran (setelah klik bayar)
+    // Kita perlu membuat route GET juga agar halaman 'lanjutkan pembayaran' bisa diakses
+    // Tapi karena logika Anda di controller langsung return view, POST saja mungkin cukup
+    // Namun, jika redirect, kita butuh GET. Mari kita lihat controller Anda.
+});
 require __DIR__.'/auth.php';

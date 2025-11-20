@@ -1,4 +1,18 @@
-<x-app-layout>
+<?php
+    // 1. Tentukan Layout dan Redirect berdasarkan siapa yang login
+    if (Auth::guard('web')->check()) {
+        // Jika Admin
+        $layout = 'app-layout';
+        $redirectUrl = route('tagihan.index');
+    } else {
+        // Jika Penyewa
+        $layout = 'penyewa-layout';
+        $redirectUrl = route('penyewa.dashboard');
+    }
+?>
+
+{{-- 2. Gunakan Dynamic Component untuk memilih layout otomatis --}}
+<x-dynamic-component :component="$layout">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Pembayaran Tagihan') }}
@@ -13,6 +27,7 @@
                     <p>Penyewa: {{ $tagihan->sewa->penyewa->nama_lengkap }}</p>
                     <p>Unit: {{ $tagihan->sewa->unit->name }}</p>
                     <p>Jumlah: Rp {{ number_format($tagihan->jumlah) }}</p>
+                    
                     <button id="pay-button" class="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                         Lanjutkan Pembayaran
                     </button>
@@ -30,24 +45,25 @@
             // Panggil snap.pay dengan Snap Token
             window.snap.pay('{{ $snapToken }}', {
                 onSuccess: function(result){
-                    /* Anda bisa menangani hasil sukses di sini */
+                    /* Pembayaran sukses */
                     alert("Pembayaran sukses!"); console.log(result);
-                    window.location.href = "{{ route('tagihan.index') }}";
+                    // Redirect dinamis (Admin ke Tagihan, Penyewa ke Dashboard)
+                    window.location.href = "{{ $redirectUrl }}";
                 },
                 onPending: function(result){
-                    /* Anda bisa menangani hasil pending di sini */
+                    /* Menunggu pembayaran */
                     alert("Menunggu pembayaran!"); console.log(result);
-                    window.location.href = "{{ route('tagihan.index') }}";
+                    window.location.href = "{{ $redirectUrl }}";
                 },
                 onError: function(result){
-                    /* Anda bisa menangani hasil error di sini */
+                    /* Pembayaran gagal */
                     alert("Pembayaran gagal!"); console.log(result);
                 },
                 onClose: function(){
-                    /* Pop-up ditutup tanpa menyelesaikan pembayaran */
+                    /* Pop-up ditutup */
                     alert('Anda menutup pop-up tanpa menyelesaikan pembayaran');
                 }
             });
         });
     </script>
-</x-app-layout>
+</x-dynamic-component>
